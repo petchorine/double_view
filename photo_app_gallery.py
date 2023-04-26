@@ -3,58 +3,47 @@ import os
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.camera import Camera
-from kivy.metrics import dp
 from kivy.uix.button import Button
-from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.scrollview import ScrollView
 
 
 class SquareImage(Image):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.allow_stretch = True
-        self.keep_ratio = False
-        self.size_hint_y = None
-        self.height = dp(self.width)
+    pass
+
 
 class MyNewGallery(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        my_scroll = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
-        self.my_gallery_grid = GridLayout(cols=3, spacing=dp(5), padding=dp(5),
-                                          size_hint=(1, None), height=1000)
+        
         self.add_images_to_gallery()
-        my_scroll.add_widget(self.my_gallery_grid)
-
-        self.add_widget(my_scroll)
 
 
     def add_images_to_gallery(self, *args):
+        compteur_photo = 0
         path = "/home/petchorine/Desktop/monPyhon/mes_projets_python/Double_view/Images"
         for filename in os.listdir(path):
             if os.path.isfile(os.path.join(path, filename)):
-                img = SquareImage(source=f"/home/petchorine/Desktop/monPyhon/mes_projets_python/Double_view/Images/{filename}")
-                self.my_gallery_grid.add_widget(img)
+                img = SquareImage(source=f"/home/petchorine/Desktop/monPyhon/mes_projets_python/Double_view/Images/{filename}")                
+                self.ids.scroll.add_widget(img)
+                compteur_photo += 1
+                
 
     def refresh_gallery(self, *args):
-        self.my_gallery_grid.clear_widgets()
+        self.ids.scroll.clear_widgets()
         self.add_images_to_gallery()
+
 
 class MyCamera(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.orientation = "vertical"
 
-        self.camera = Camera(resolution=(350, 700), play=True)
+        self.camera = Camera(play=True)
         self.add_widget(self.camera)
 
-        button = Button(text="Prendre une photo", size_hint=(1, 0.1))
-        button.bind(on_press=self.on_button_press)
-        self.add_widget(button)
 
-    def on_button_press(self, instance):
+    def take_picture(self, *args):
         path = "/home/petchorine/Desktop/monPyhon/mes_projets_python/Double_view/Images"
         # compte le nbre de fichier dans les dossier destination des photos
         # permet de renommer chaque photo prise avec un nbr en plus

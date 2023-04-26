@@ -1,0 +1,41 @@
+<SquareImage>:
+    allow_stretch: True
+    keep_ratio: True
+    size_hint_y: None
+    height: self.width
+    canvas.before:
+        Color:
+            rgb: (1, 0, 0)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+
+<MyNewGallery>:
+    ScrollView:
+        GridLayout:
+            id: scroll
+
+            cols: 3
+            # je fixe une largeur par défaut pour une colonne (taille de l'écran / 3) - 10 (pour les marges)
+            col_default_width: (self.width / 3) - 10
+            padding: "5dp"
+            spacing: "5dp"
+
+            size_hint: 1, None
+            height: self.minimum_height
+
+#    Button:
+#        text: "to camera"
+#        size_hint: None, None
+#        size: 100, 100
+#        pos_hint: {"right": 1}
+#        on_press: root.to_camera()
+
+<MyCamera>:
+    Button:
+        text: "Clic"
+        size_hint: 1, 0.1
+        on_press: root.take_picture()
+
+
